@@ -1,0 +1,64 @@
+---
+title: "Data cleaning hints"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Use `View()`, `str()`, `summary()`, or other functions to check out the data. If you used `read.csv` with the default settings, most of the columns are `factors`. Re-read them in with the option `stringsAsFactors=F`.
+
+\bigskip
+
+\bigskip
+
+2. Use the function `tolower()` on `colnames(measles)`.
+
+\bigskip
+
+\bigskip
+
+3. Use `gather()` from the `tidyr` package to change the data into long format from wide format. Use `?gather` if you need help using the function.
+
+\bigskip
+
+\bigskip
+
+4. Use the `str_replace()` function from the `stringr` package.
+
+\bigskip
+
+\bigskip
+
+5. Using `as.numeric()` on the measle cases column.
+
+\bigskip
+
+\bigskip
+
+6. Use `max()` to find the maximum measle number. Use `which.max()` to find the row number of the maximum value. Can you use that to find the state name of the maximum value?
+
+\bigskip
+
+\bigskip
+
+7. Find the maximum value of week with `max()`. Then create a new variable for time in year based on `(week-1)/max(week)`.
+
+\bigskip
+
+\bigskip
+
+8. To choose one state from your data frame, use `filter(measles, state=="state_name")` from the `dplyr` package. Use `geom_line()` with `aes(x=year+time_in_year, y=cases)` from the `ggplot2` package to make the plot.
+
+\bigskip
+
+\bigskip
+
+9a. Try using the `group_by()` and `summarize()` functions from `dplyr`.
+
+\bigskip
+
+\bigskip
+
+9b. Use `sum(is.na())` in your `summarize()` call.

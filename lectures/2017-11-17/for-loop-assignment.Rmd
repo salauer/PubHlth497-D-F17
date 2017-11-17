@@ -1,0 +1,62 @@
+---
+title: "`for`-loop assignment"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+DataCamp showed you the most simple way to use `for`-loops in `R`, perhaps in ways that weren't very useful.
+Here's an example of a way that I use `for`-loops in order to evaluate the prediction interval (confidence intervals for predictions) of my dengue fever forecasts.
+Start off by reading in the `annual-dengue-data.csv` that you downloaded from Moodle.
+
+1. Separate the data into `train_data` and `test_data`, with `train_data` containing the years 2000-2009 and `test_data` containing the years 2010-2014.
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+2. Fit a linear model for `dengue_rate` in `train_data` using all of the variables except for `year` and assign it to `dengue_fit`.
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+3. Check out your model fit. What's the strongest predictor of your data?
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+4. Predict the values of `dengue_rate` for `test_data` and have the output include standard errors (use `?predict.lm` to see the options). Assign it to `dengue_preds`.
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+5. This one is the tricky part if you've never done it before. Make a `for`-loop that creates a prediction interval for each value in `dengue_preds` using the mean and standard error (there are a couple ways of doing this).
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+6. How often does the 95% prediction interval cover the observed value?
+
+\bigskip
+
+\bigskip
+
+\bigskip
+
+7. If you have time, can you find a linear model that makes better prediction intervals?
