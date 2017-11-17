@@ -1,0 +1,89 @@
+---
+title: "Measles Data Cleaning"
+date: "11/3/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+### 1. Read the data into R. What class are most of the columns of the data? What issues can you find with the data?
+  a. Most of the columns of the data are factors. This is an issue since the values in the columns should be values or numeric/integer values since they likely indicate the number of cases of measeles within a given state at a specific point in time.
+  
+```{r load}
+library(dplyr)
+measles = read.csv('MEASLES_Cases_1928-2003.csv')
+
+```
+
+### 2. Change the column names from upper case to lower case.
+
+```{r ex2m, results = 'asis'}
+head(colnames(measles))
+
+colnames(measles) <- tolower(colnames(measles))
+
+head(colnames(measles))
+```
+
+### 3. Transform the data into long format from wide format.
+
+```{r ex3}
+library(tidyr)
+measles2 = gather(measles, key = 'state', value = 'cases', alabama:wyoming)
+
+head(measles2)
+```
+
+### 4. Re-name the missing measles values as NA.
+
+```{r ex4}
+library(stringr)
+head(which(measles2$cases=="-"))
+measles2$cases = str_replace(measles2$cases, '-','NA')
+measles2$cases[91]
+```
+
+### 5. Change the values for the measles cases from characters to numbers.
+
+```{r ex5}
+measles2 = tbl_df(measles2)
+measles2$cases = as.numeric(measles2$cases)
+```
+### 6. Find the largest number of measles cases for a single week in any state. Which state was it?
+  a. Kentucky was the state with the largest number of measles cases with 10402 cases in 1954
+```{r ex6}
+max(measles2$cases, na.rm=T)
+which.max(measles2$cases)
+measles2[68544,]
+```
+### 7. In the step (8) we will want to plot the time series of measles cases. In order to do that, we need the weeks to indicate the time between years. Thus they must be scaled to between 0 and 1, with the first week of the year equaling 0 and the last week of the year coming just before 1.
+
+```{r ex7}
+max(measles2$week)
+
+measles2 = mutate(measles2, scale_week = (week-1)/max(week), new_year = year + scale_week)
+
+max(measles2$scale_week)
+```
+
+### 8. Choose one state and make a line plot with the state’s measles cases on the y-axis versus year and time-in-year on the x-axis.
+
+```{r ex8}
+measles2_va = filter(measles2, state == 'virginia')
+
+library(ggplot2)
+
+ggplot(measles2_va, aes(x = new_year, y = cases)) +
+    geom_line() +
+    labs(title = 'Cases of measles in Virginia', x = 'Year',y= 'Number of Measles Cases')
+```
+
+###Bonus 9. Make a table or data frame that shows the number of NA values for each state.
+
+```{r ex9}
+measles2 %>%
+    group_by(state) %>%
+    summarise(missing = sum(is.na(cases)))
+```
